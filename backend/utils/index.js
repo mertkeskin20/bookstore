@@ -6,21 +6,31 @@ const isValidObjectId = (id, res) => {
   }
 };
 
-const findDocumentById = async (model, id,res) => {
-    try {
-        const document = await model.findById(id);
+const findDocumentById = async (model, id, res) => {
+  try {
+    const document = await model.findById(id);
 
-        if (!document) {
-            res.status(400).json({error: `The ${model.modelName} does not exist!`});
-            return null;
-        }
-        return document;
-    
-    } catch (error) {
-    console.error(`Error while finding ${model.modelName} by ID`, error);
-    return res.status(500).json({error: 'Internaş Server error'});    
+    if (!document) {
+      res.status(400).json({ error: `The ${model.modelName} does not exist!` });
+      return null;
     }
-    ;
-}
+    return document;
+  } catch (error) {
+    console.error(`Error while finding ${model.modelName} by ID`, error);
+    return res.status(500).json({ error: "Internaş Server error" });
+  }
+};
 
-export { isValidObjectId, findDocumentById };
+const checkValidationErrors = (error, res) => {
+  const validationErrors = {};
+
+  for (let field in error.errors) {
+    validationErrors[field] = error.errors[field].message;
+  }
+
+  return res
+  .status(400)
+  .json({ error: "Validation error", validationErrors });
+};
+
+export { isValidObjectId, findDocumentById, checkValidationErrors };

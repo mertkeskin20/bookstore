@@ -1,5 +1,9 @@
 import Book from "../models/Book.js";
-import { isValidObjectId,findDocumentById } from "../utils/index.js";
+import {
+  isValidObjectId,
+  findDocumentById,
+  checkValidationErrors,
+} from "../utils/index.js";
 
 const getAllBooks = async (req, res) => {
   try {
@@ -17,14 +21,13 @@ const getABook = async (req, res) => {
   if (isValidObjectId(id, res)) return;
 
   try {
-    const book = await findDocumentById(Book, id ,res);
+    const book = await findDocumentById(Book, id, res);
     if (!book) return;
 
     res.status(200).json(book);
   } catch (error) {
     console.error("Error at getABook", error);
     return res.status(500).json({ error: "Internal Server error" });
-    
   }
 };
 
@@ -40,19 +43,11 @@ const createABook = async (req, res) => {
     const newBook = await Book.create(req.body);
     return res
       .status(201)
-      .json({ message: "book created succesfully", book: newBook });
+      .json({ message: "Book created succesfully", book: newBook });
   } catch (error) {
     //handle mongoose validation error
     if (error.name === "ValidationError") {
-      const validationErrors = {};
-
-      for (let field in error.errors) {
-        validationErrors[field] = error.errors[field].message;
-      }
-
-      return res
-        .status(400)
-        .json({ error: "Validation error", validationErrors });
+      if (checkValidationErrors(error, res)) return;
     } else {
       console.error("Error at createBook", error);
       return res.status(500).json({ error: "Internal Server error" });
@@ -67,7 +62,7 @@ const updateABook = async (req, res) => {
   if (isValidObjectId(id, res)) return;
 
   try {
-    const book = await findDocumentById(Book, id ,res);
+    const book = await findDocumentById(Book, id, res);
     if (!book) return;
 
     book.title = title || book.title;
@@ -91,7 +86,7 @@ const deleteABook = async (req, res) => {
   if (isValidObjectId(id, res)) return;
 
   try {
-    const book = await findDocumentById(Book, id ,res);
+    const book = await findDocumentById(Book, id, res);
     if (!book) return;
 
     await book.deleteOne();

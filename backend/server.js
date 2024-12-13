@@ -1,5 +1,6 @@
 import express from 'express';
 import bookRoute from './routes/bookRoute.js';
+import authRoute from './routes/authRoute.js';
 import connectDB from './config/db.js';
 import cors from 'cors';
 const app = express();
@@ -13,6 +14,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/api/v1/books', bookRoute);
+app.use('/api/v1/auth', authRoute);
 
 
 try {
