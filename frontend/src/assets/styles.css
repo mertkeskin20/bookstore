@@ -3,7 +3,7 @@
 /*root variables*/
 :root{
     --primary-color: #1661E0;
-    --secondary-color: #B7EF70;
+    --secondary-color: #48b688;
 }
 
 /*general settings*/
@@ -23,3 +23,25 @@ a{
   display: flex;
   align-items: center;
 }
+
+.form-control {
+    border-radius: 25px;
+    height: 48px;
+  }
+  .form-control:focus {
+    box-shadow: none !important;
+  }
+  
+  .btn-primary {
+    border-radius: 25px;
+    height: 48px;
+    background-color: var(--secondary-color) !important;
+    border: 1px solid var(--secondary-color) !important;
+    min-width: 175px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #fff !important;
+    color: var(--secondary-color) !important;
+    transition: all 0.3s ease;
+  }

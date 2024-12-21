@@ -33,8 +33,11 @@ export const useAuthStore = defineStore("authStore", {
         );
         this.user = response.data.user;
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${response.data.token}`;
       } catch (error) {
-        console.log("error at login user: ", error);
+        throw error.response.data;
       }
     },
     logout() {

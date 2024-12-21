@@ -8,6 +8,9 @@ import { createPinia } from "pinia";
 import { useBookStore } from "./stores/bookStore";
 import { useAuthStore } from "./stores/authStore";
 
+import Toast from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-bootstrap.css";
+
 /* import the fontawesome core */
 import { library } from "@fortawesome/fontawesome-svg-core";
 
@@ -15,15 +18,22 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 /* import specific icons */
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
+import {
+  faThumbsUp,
+  faArrowLeft,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faThumbsUp as farThumbsUp,
+  faPenToSquare,
+} from "@fortawesome/free-regular-svg-icons";
 
 /* add icons to the library */
-library.add(faArrowLeft, faThumbsUp);
+library.add(faArrowLeft, faThumbsUp, faPenToSquare, faTrash, farThumbsUp);
 
 const pinia = createPinia();
 
-const storedUser = localStorage.getItem('user');
+const storedUser = localStorage.getItem("user");
 
 if (storedUser) {
   const userData = JSON.parse(storedUser);
@@ -38,5 +48,6 @@ bookStore.fetchBooks().then(() => {
     .use(pinia)
     .use(router)
     .component("font-awesome-icon", FontAwesomeIcon)
+    .use(Toast)
     .mount("#app");
 });
