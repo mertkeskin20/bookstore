@@ -159,7 +159,8 @@ export default {
           position: "top-right",
           timeout: 3500,
           closeButton: "button",
-          icon: "fas fa-rocket",
+          icon: true,
+          rtl: false,
         });
 
         setTimeout(() => {
