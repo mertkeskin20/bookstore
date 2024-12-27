@@ -4,9 +4,13 @@ import * as authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 router.route("/book/:id").get(commentController.getCommentsForBook);
+router
+  .route("/user/:id")
+  .get(authMiddleware.authenticateUser, commentController.getCommentsByUser);
 
 router
   .route("/")
+  .get(commentController.getAllComments)
   .post(authMiddleware.authenticateUser, commentController.createAComment);
 
 export default router;

@@ -7,6 +7,7 @@ import router from "@/router/index.js";
 import { createPinia } from "pinia";
 import { useBookStore } from "./stores/bookStore";
 import { useAuthStore } from "./stores/authStore";
+import { useCommentStore } from "./stores/commentStore";
 import axios from "axios";
 import Toast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-bootstrap.css";
@@ -71,13 +72,21 @@ if (storedUser) {
 }
 
 const bookStore = useBookStore(pinia);
+const commentStore = useCommentStore(pinia);
 
-bookStore.fetchBooks().then(() => {
-  const app = createApp(App);
-  app
-    .use(pinia)
-    .use(router)
-    .component("font-awesome-icon", FontAwesomeIcon)
-    .use(Toast)
-    .mount("#app");
-});
+const init = async () => {
+  try {
+    await Promise.all([bookStore.fetchBooks(), commentStore.fetchComments()]);
+    const app = createApp(App);
+    app
+      .use(pinia)
+      .use(router)
+      .component("font-awesome-icon", FontAwesomeIcon)
+      .use(Toast)
+      .mount("#app");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+init();

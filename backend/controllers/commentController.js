@@ -19,6 +19,19 @@ const createAComment = async (req, res) => {
   }
 };
 
+const getAllComments = async (req, res) => {
+  try {
+    const comments = await Comment.find().populate({
+      path: "postedBy",
+      select: "username",
+    });
+    res.status(200).json({ message: "Comments fetched", comments });
+  } catch (error) {
+    console.error("Error at getAllComments", error);
+    return res.status(500).json({ error: "Internal Server error" });
+  }
+};
+
 const getCommentsForBook = async (req, res) => {
   try {
     const { id } = req.params;
@@ -33,4 +46,23 @@ const getCommentsForBook = async (req, res) => {
   }
 };
 
-export { createAComment, getCommentsForBook };
+const getCommentsByUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const comments = await Comment.find({ postedBy: id }).populate("book");
+    return res
+      .status(201)
+      .json({ message: "Comments for book fetched", comments });
+  } catch (error) {
+    console.error("Error at getCommentsByUser", error);
+    return res.status(500).json({ error: "Internal Server error" });
+  }
+};
+
+export {
+  createAComment,
+  getCommentsForBook,
+  getCommentsByUser,
+  getAllComments,
+};

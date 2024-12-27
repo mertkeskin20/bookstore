@@ -1,5 +1,5 @@
 <template>
-  <section style="min-height: calc(100vh - 130px); overflow: hidden;">
+  <section style="min-height: calc(100vh - 130px); overflow: hidden">
     <div class="container py-4">
       <ul class="nav nav-tabs" id="dashboardTab" role="tablist">
         <li class="nav-item" role="presentation" @click="activeTab = 'general'">
@@ -32,6 +32,21 @@
             Books
           </button>
         </li>
+        <li class="nav-item" role="presentation" @click="activeTab = 'comments'">
+          <button
+            class="nav-link"
+            :class="{ active: activeTab === 'comments' }"
+            id="comments-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#comments-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="comments-tab-pane"
+            aria-selected="false"
+          >
+            Comments
+          </button>
+        </li>
       </ul>
       <div class="tab-content py-4" id="dashboardContent">
         <div
@@ -54,6 +69,16 @@
         >
           <DashboardBooks />
         </div>
+        <div
+          class="tab-pane fade"
+          :class="{ 'active show': activeTab === 'comments' }"
+          id="comments-tab-pane"
+          role="tabpanel"
+          aria-labelledby="comments-tab"
+          tabindex="0"
+        >
+          <DashboardComments />
+        </div>
       </div>
     </div>
   </section>
@@ -62,16 +87,18 @@
 <script>
 import DashboardGeneral from "@/components/dashboard/DashboardGeneral.vue";
 import DashboardBooks from "@/components/dashboard/DashboardBooks.vue";
+import DashboardComments from "@/components/dashboard/DashboardComments.vue";
 
 export default {
   name: "DashboardView",
   components: {
     DashboardGeneral,
     DashboardBooks,
+    DashboardComments,
   },
   data() {
     return {
-      activeTab: "general",
+      activeTab: "comments",
     };
   },
 };

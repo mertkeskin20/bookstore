@@ -1,31 +1,27 @@
 import mongoose from "mongoose";
 
-const commentSchema = new mongoose.Schema(
+const ratingSchema = new mongoose.Schema(
   {
-    content: {
-      type: String,
+    rate: {
+      type: Number,
       required: true,
+      min: 1,
+      max: 10,
     },
     book: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Book",
       required: true,
     },
-    postedBy: {
+    ratedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    upvotes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   { timestamps: true }
 );
 
-const Comment = mongoose.model("Comment", commentSchema);
+const Rating = mongoose.model("Rating", ratingSchema);
 
-export default Comment;
+export default Rating;
