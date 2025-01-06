@@ -2,7 +2,11 @@
   <section style="min-height: calc(100vh - 130px); overflow: hidden">
     <div class="container py-4">
       <ul class="nav nav-tabs" id="dashboardTab" role="tablist">
-        <li class="nav-item" role="presentation" @click="activeTab = 'general'">
+        <li
+          class="nav-item"
+          role="presentation"
+          @click="setActiveTab('general')"
+        >
           <button
             class="nav-link"
             :class="{ active: activeTab === 'general' }"
@@ -17,7 +21,7 @@
             General
           </button>
         </li>
-        <li class="nav-item" role="presentation" @click="activeTab = 'books'">
+        <li class="nav-item" role="presentation" @click="setActiveTab('books')">
           <button
             class="nav-link"
             :class="{ active: activeTab === 'books' }"
@@ -32,7 +36,11 @@
             Books
           </button>
         </li>
-        <li class="nav-item" role="presentation" @click="activeTab = 'comments'">
+        <li
+          class="nav-item"
+          role="presentation"
+          @click="setActiveTab('comments')"
+        >
           <button
             class="nav-link"
             :class="{ active: activeTab === 'comments' }"
@@ -84,23 +92,16 @@
   </section>
 </template>
 
-<script>
+<script setup>
 import DashboardGeneral from "@/components/dashboard/DashboardGeneral.vue";
 import DashboardBooks from "@/components/dashboard/DashboardBooks.vue";
 import DashboardComments from "@/components/dashboard/DashboardComments.vue";
+import { ref } from "vue";
 
-export default {
-  name: "DashboardView",
-  components: {
-    DashboardGeneral,
-    DashboardBooks,
-    DashboardComments,
-  },
-  data() {
-    return {
-      activeTab: "comments",
-    };
-  },
+const activeTab = ref("general");
+
+const setActiveTab = (tab) => {
+  activeTab.value = tab;
 };
 </script>
 

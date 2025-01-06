@@ -11,7 +11,7 @@ export const useUserStore = defineStore("userStore", {
         );
         return response.data;
       } catch (error) {
-        console.log("error at updating user details ", error);
+        console.log(error);
         throw error.response.data;
       }
     },

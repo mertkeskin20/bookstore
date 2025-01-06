@@ -82,72 +82,60 @@
   </section>
 </template>
 
-<script>
+<script setup>
 import { useAuthStore } from "@/stores/authStore";
-import { faLess } from "@fortawesome/free-brands-svg-icons";
-import { mapActions } from "pinia";
 import { useToast } from "vue-toast-notification";
+import { ref, reactive, computed } from "vue";
+import { useRouter } from "vue-router";
 
-export default {
-  name: "LoginView",
-  data() {
-    return {
-      formData: {
-        email: "",
-        password: "",
-      },
-      showEmailWarningMessage: false,
-      showPasswordWarningMessage: false,
-      notFoundEmail: null,
-      isPasswordMatch: true,
-    };
-  },
-  methods: {
-    ...mapActions(useAuthStore, ["login"]),
-    async submitForm() {
-      try {
-        await this.login(this.formData);
+const formData = reactive({
+  email: "",
+  password: "",
+});
 
-        const toast = useToast();
+const showEmailWarningMessage = ref(false);
+const showPasswordWarningMessage = ref(false);
+const notFoundEmail = ref(null);
+const isPasswordMatch = ref(true);
 
-        toast.success("You will be redirected to the dashboard page.", {
-          position: "top-right",
-          timeout: 3500,
-          closeButton: "button",
-          icon: true,
-          rtl: false,
-        });
+const authStore = useAuthStore();
+const router = useRouter();
 
-        setTimeout(() => {
-          this.$router.push("/dashboard");
-        }, 3000);
-      } catch (data) {
-        const { error } = data;
+const submitForm = async () => {
+  try {
+    await authStore.login(formData);
 
-        if (error === "User not found!") {
-          this.notFoundEmail = this.formData.email;
-        } else if (error === "Password is not true!") {
-          this.isPasswordMatch = false;
-        }
-      }
-    },
-  },
+    const toast = useToast();
 
-  computed: {
-    isFormValid() {
-      return this.isEmailValid && this.isPasswordValid;
-    },
-    isEmailValid() {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.formData.email);
-    },
-    isPasswordValid() {
-      return (
-        this.formData.password.length >= 4 &&
-        this.formData.password.length <= 10
-      );
-    },
-  },
+    toast.success("You will be redirected to the dashboard page.", {
+      position: "top-right",
+      timeout: 3500,
+      closeButton: "button",
+      icon: true,
+      rtl: false,
+    });
+
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 2000);
+  } catch (data) {
+    const { error } = data;
+
+    if (error === "User not found!") {
+      notFoundEmail.value = formData.email;
+    } else if (error === "Password is not true!") {
+      isPasswordMatch.value = false;
+    }
+  }
 };
+
+const isFormValid = computed(() => isEmailValid.value && isPasswordValid.value);
+const isEmailValid = computed(() =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+);
+const isPasswordValid = computed(
+  () => formData.password.length >= 4 && formData.password.length <= 10
+);
 </script>
 
 <style lang="scss" scoped></style>
